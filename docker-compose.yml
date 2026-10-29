@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE: ${VITE_API_BASE:-https://clickortrick.pgthegod.space/api}
+    env_file:
+      - .env
+    environment:
+      FRONTEND_DIST_PATH: /app/public
+    ports:
+      - "${PORT:-4000}:4000"
+    restart: unless-stopped

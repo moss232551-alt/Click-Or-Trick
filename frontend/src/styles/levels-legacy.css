@@ -1,0 +1,544 @@
+/* Reset + font */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+.level-page {
+  --node-size: 80px;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  background: #b0d6f5;
+  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: clamp(1rem, 2vw, 2rem) 1rem 2rem;
+}
+
+:root {
+  --node-size: 80px;
+}
+
+/* Fullscreen background; app is centered & scaled */
+/* Blueprint grid */
+.level-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(#a5c8ea 1px, transparent 1px),
+    linear-gradient(90deg, #a5c8ea 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* extra techy glow */
+.level-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.15), transparent 60%),
+    radial-gradient(circle at 15% 80%, rgba(255, 255, 255, 0.12), transparent 55%);
+  mix-blend-mode: screen;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.level-navbar {
+  width: min(925px, 100%);
+  position: relative;
+  z-index: 10;
+}
+
+.level-nav-links {
+  gap: 1rem;
+}
+
+/* ---- Figma-sized app card ---- */
+.app {
+  position: relative;
+  width: min(1020px, 100%);
+  min-height: 520px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: grid;
+  grid-template-columns: 285px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 90px;
+  column-gap: 24px;
+  row-gap: 16px;
+  padding: 20px 24px 0;
+  box-shadow: 0 18px 50px rgba(12, 28, 64, 0.15);
+}
+
+/* faint lock on the right */
+.app::before {
+  content: '';
+  position: absolute;
+  right: 80px;
+  top: 70px;
+  width: 170px;
+  height: 220px;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='260' viewBox='0 0 200 260' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 40c-27.6 0-50 22.4-50 50v40H36c-8.8 0-16 7.2-16 16v88c0 8.8 7.2 16 16 16h128c8.8 0 16-7.2 16-16v-88c0-8.8-7.2-16-16-16h-14V90c0-27.6-22.4-50-50-50zm0 24c14.4 0 26 11.6 26 26v40H74V90c0-14.4 11.6-26 26-26z' fill='%23ffffff' fill-opacity='0.12'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ---- Left panel ---- */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-right: 8px;
+  position: relative;
+  z-index: 5;
+}
+
+.profile-header {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.avatar-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  background: #c9dff3;
+  margin-right: 18px;
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.game-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1d4b76;
+}
+
+.underline {
+  width: 115px;
+  height: 5px;
+  border-radius: 10px;
+  background: #1f3f72;
+  margin: 4px 0 6px;
+}
+
+.page-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #233c64;
+}
+
+.info-card {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+.info-card h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #222;
+}
+
+.info-card p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #2a3d5e;
+}
+
+.level-details-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.78rem;
+  color: #1f365d;
+}
+
+.level-details-card li {
+  margin-bottom: 0.25rem;
+}
+
+.level-details-card strong {
+  font-size: 0.85rem;
+}
+
+.play-level-btn {
+  display: inline-block;
+  margin-top: 0.7rem;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  background: #1d4b76;
+  color: #fff;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.play-level-btn.disabled {
+  background: rgba(30, 60, 107, 0.3);
+  pointer-events: none;
+}
+
+.play-level-btn:not(.disabled):hover {
+  transform: translateY(-1px);
+}
+
+.rules-card ul {
+  padding-left: 1rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: #1f365d;
+}
+
+.rules-card li {
+  margin-bottom: 0.25rem;
+}
+
+.level-score-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  background: #1d4b76;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.level-score-btn:hover {
+  background: #153755;
+  transform: translateY(-1px);
+}
+
+.level-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: #4b5a7f;
+}
+
+/* ---- Map area ---- */
+.map-area {
+  position: relative;
+  padding-left: 0;
+  min-height: 340px;
+}
+
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+  max-height: 440px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.map-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 2200px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.15s ease-out;
+}
+
+.map-inner.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.map-lines-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.map-lines-svg line {
+  stroke: #27648a;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.level-node {
+  position: absolute;
+  width: var(--node-size);
+  height: var(--node-size);
+  border-radius: 18px;
+  border: none;
+  border: 4px solid #1e3c6b;
+  background: #fff;
+  box-shadow: 0 7px 14px rgba(17, 23, 41, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #1f3f72;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.level-node span {
+  pointer-events: none;
+}
+
+.level-node::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 2px dashed rgba(30, 60, 107, 0.5);
+  border-radius: 14px;
+}
+
+.level-node:focus-visible {
+  outline: 3px solid #ff8a4f;
+  outline-offset: 4px;
+}
+
+.level-node:hover {
+  transform: translateY(-6px);
+}
+
+.level-node.active {
+  border-color: #ff8a4f;
+  transform: translateY(-8px) scale(1.04);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.level-node.completed {
+  background: linear-gradient(135deg, #fef6d3, #ffe1b5);
+  border-color: #f59e0b;
+}
+
+.level-node.unlocked:not(.active) {
+  border-color: #2563eb;
+}
+
+.level-node.locked {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* manual placement to match figma layout */
+.node-1-2 {
+  left: 40px;
+  top: 40px;
+}
+.node-2-1 {
+  left: 240px;
+  top: 100px;
+}
+.node-3-1 {
+  left: 420px;
+  top: 20px;
+}
+.node-4-1 {
+  left: 600px;
+  top: 110px;
+}
+.node-5-1 {
+  left: 780px;
+  top: 30px;
+}
+.node-6-1 {
+  left: 960px;
+  top: 120px;
+}
+.node-7-1 {
+  left: 1140px;
+  top: 60px;
+}
+.node-8-1 {
+  left: 1320px;
+  top: 130px;
+}
+.node-9-1 {
+  left: 1500px;
+  top: 60px;
+}
+.node-10-1 {
+  left: 1620px;
+  top: 130px;
+}
+
+/* ---- Bottom bar ---- */
+.bottom-bar {
+  grid-column: 1 / -1;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 28px 28px 0 0;
+  padding: 16px 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.bottom-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.diamond-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #43b5ff, #004e92);
+}
+
+.level-text {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #6074a1;
+}
+
+.level-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #233c64;
+}
+
+.xp-bar {
+  width: 140px;
+  height: 10px;
+  background: rgba(96, 121, 173, 0.3);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #48cfad, #2f74c0);
+  width: 70%;
+}
+
+.bottom-center {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f3f72;
+}
+
+.bottom-right {
+  display: flex;
+  gap: 8px;
+}
+
+.round-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #e9efff;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 2px rgba(31, 63, 100, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.round-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 80px;
+    padding: 16px;
+  }
+
+  .left-panel {
+    padding-right: 0;
+  }
+
+  .map-wrapper {
+    min-height: 320px;
+  }
+
+  .bottom-bar {
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .level-nav-links {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .map-inner {
+    width: 1700px;
+  }
+
+  .bottom-bar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .bottom-right {
+    justify-content: center;
+  }
+  .level-details-card ul {
+    font-size: 0.8rem;
+  }
+
+  .level-page {
+    --node-size: 65px;
+  }
+}
+
+@media (max-width: 520px) {
+  .level-nav-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .level-nav-links a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .map-wrapper {
+    min-height: 260px;
+  }
+
+  .level-page {
+    --node-size: 52px;
+  }
+}

@@ -1,0 +1,383 @@
+openapi: 3.0.3
+info:
+  title: Click Or Trick Backend API
+  description: |
+    AI-generated phishing defense simulator backend. The service provides challenge generation,
+    sample retrieval, and player result recording. Use this spec with ReDoc or any OpenAPI viewer
+    for human-friendly documentation.
+  version: 0.1.0
+servers:
+  - url: https://clickortrickapi.pgthegod.space/api
+    description: Production
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags: [System]
+      responses:
+        '200':
+          description: Service is alive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /challenges/generate:
+    post:
+      summary: Generate a phishing challenge
+      tags: [Challenges]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeRequest'
+      responses:
+        '200':
+          description: Challenge payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /challenges/samples:
+    get:
+      summary: List built-in sample challenges
+      tags: [Challenges]
+      responses:
+        '200':
+          description: Static fallback set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 3
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Challenge'
+  /challenges/results:
+    post:
+      summary: Record a player result
+      tags: [Results]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResultRequest'
+      responses:
+        '201':
+          description: Result stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /challenges/results/recent:
+    get:
+      summary: List recent player submissions (sanitized)
+      tags: [Results]
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+          required: false
+          description: Maximum number of results to return.
+      responses:
+        '200':
+          description: Recent result feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecentResultList'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /challenges/clues/reveal:
+    post:
+      summary: Reveal a clue for a challenge
+      tags: [Challenges]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClueRevealRequest'
+      responses:
+        '200':
+          description: Clue revealed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClueRevealResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/ServerError'
+components:
+  schemas:
+    ChallengeRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Type'
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
+        target:
+          $ref: '#/components/schemas/Target'
+        tactic:
+          $ref: '#/components/schemas/Tactic'
+    Challenge:
+      type: object
+      required: [id, type, difficulty, target, tactic, from, subject, body, source, clueCount]
+      properties:
+        id:
+          type: string
+          example: lK92sjD81sXz
+        type:
+          $ref: '#/components/schemas/Type'
+        difficulty:
+          $ref: '#/components/schemas/Difficulty'
+        target:
+          $ref: '#/components/schemas/Target'
+        tactic:
+          $ref: '#/components/schemas/Tactic'
+        from:
+          type: string
+          format: email
+          example: billing@amaze-shop.co
+        subject:
+          type: string
+        body:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+          example: ["invoice87422.pdf"]
+        source:
+          type: string
+          enum: [ai, fallback]
+        clueCount:
+          type: integer
+          minimum: 0
+          example: 3
+        hasAnswer:
+          type: boolean
+        hasExplanation:
+          type: boolean
+    ResultRequest:
+      type: object
+      required: [challengeId, playerAnswer, playerExplanation]
+      properties:
+        challengeId:
+          type: string
+        playerId:
+          type: string
+        playerAnswer:
+          $ref: '#/components/schemas/Answer'
+        correctAnswer:
+          $ref: '#/components/schemas/Answer'
+        playerExplanation:
+          type: string
+          description: Short free-text rationale from the player.
+          maxLength: 1000
+          example: "I picked suspicious because the domain isn't the real bank."
+        responseTimeMs:
+          type: integer
+          minimum: 0
+          example: 18000
+        scoreDelta:
+          type: integer
+        metadata:
+          type: object
+          additionalProperties: true
+    ResultResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [stored, queued]
+        correctAnswer:
+          $ref: '#/components/schemas/Answer'
+        feedback:
+          $ref: '#/components/schemas/AnswerFeedback'
+    RecentResultList:
+      type: object
+      properties:
+        count:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentResult'
+    RecentResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        challengeId:
+          type: string
+        playerId:
+          type: string
+          nullable: true
+        playerAnswer:
+          $ref: '#/components/schemas/Answer'
+        playerExplanation:
+          type: string
+          nullable: true
+        responseTimeMs:
+          type: integer
+          nullable: true
+        scoreDelta:
+          type: integer
+          nullable: true
+        metadata:
+          type: object
+          nullable: true
+          additionalProperties: true
+        aiFeedback:
+          $ref: '#/components/schemas/PublicFeedback'
+        createdAt:
+          type: string
+          format: date-time
+    AnswerFeedback:
+      type: object
+      properties:
+        verdict:
+          type: string
+          enum: [correct, incorrect, partial]
+        playerAnswer:
+          $ref: '#/components/schemas/Answer'
+        correctAnswer:
+          $ref: '#/components/schemas/Answer'
+        explanation:
+          type: string
+        playerFeedback:
+          type: string
+        keyClues:
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+    PublicFeedback:
+      type: object
+      nullable: true
+      properties:
+        verdict:
+          type: string
+          enum: [correct, incorrect, partial]
+        playerAnswer:
+          $ref: '#/components/schemas/Answer'
+        explanation:
+          type: string
+        playerFeedback:
+          type: string
+        source:
+          type: string
+    ClueRevealRequest:
+      type: object
+      required: [levelId, challengeId, clueIndex]
+      properties:
+        levelId:
+          type: string
+        challengeId:
+          type: string
+        clueIndex:
+          type: integer
+          minimum: 0
+    ClueRevealResponse:
+      type: object
+      required: [status, cost, clueIndex]
+      properties:
+        status:
+          type: string
+          example: ok
+        cost:
+          type: integer
+          minimum: 0
+        clueIndex:
+          type: integer
+          minimum: 0
+        clue:
+          type: string
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        timestamp:
+          type: integer
+          format: int64
+          example: 1730000000000
+    Type:
+      type: string
+      enum: [email, sms, chat, website, pdf]
+    Difficulty:
+      type: string
+      enum: [easy, medium, hard]
+    Target:
+      type: string
+      enum: [banking, e-commerce, social media, cloud, hr, education]
+    Tactic:
+      type: string
+      enum: [fake link, sender spoof, urgency, attachment malware, fake invoice, qr scam, credential harvest, reward scam]
+    Answer:
+      type: string
+      enum: [safe, suspicious, malicious]
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      additionalProperties: false
+    ValidationErrorBody:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            issues:
+              type: array
+              items:
+                type: object
+  responses:
+    ValidationError:
+      description: Invalid request payload
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorBody'
+    ServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

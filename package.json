@@ -1,0 +1,40 @@
+{
+  "name": "tobeit-workshop",
+  "version": "1.0.0",
+  "description": "Click Or Trick backend – AI-generated phishing defense simulator API",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "node scripts/run-tests.js",
+    "db:init": "node scripts/db-init.js",
+    "docs:build": "redoc-cli bundle docs/openapi.yaml -o docs/api.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PGTHEGOD/TobeIT-Workshop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PGTHEGOD/TobeIT-Workshop/issues"
+  },
+  "homepage": "https://github.com/PGTHEGOD/TobeIT-Workshop#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.3",
+    "nanoid": "^5.1.6",
+    "openai": "^6.8.1",
+    "node-fetch": "^3.3.2",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "redoc-cli": "^0.13.21"
+  }
+}

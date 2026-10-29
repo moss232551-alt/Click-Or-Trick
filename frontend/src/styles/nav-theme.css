@@ -1,0 +1,99 @@
+.nav-theme {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 8px 20px rgba(13, 31, 60, 0.15);
+}
+
+.nav-theme-brand {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0d1f3c;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.nav-theme-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-theme-links a,
+.nav-theme-links button {
+  text-decoration: none;
+  color: #0d1f3c;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-theme-links a .icon,
+.nav-theme-links button .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.nav-theme-links a:hover,
+.nav-theme-links button:hover {
+  background: rgba(13, 31, 60, 0.08);
+}
+
+.nav-theme-links a.active,
+.nav-theme-links button.active {
+  border-color: rgba(13, 31, 60, 0.4);
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(13, 31, 60, 0.2);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.lang-toggle button {
+  border: none;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  color: #0d1f3c;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+}
+
+.lang-toggle button.active {
+  background: rgba(13, 31, 60, 0.1);
+}
+
+.lang-toggle span {
+  font-size: 0.85em;
+  color: rgba(13, 31, 60, 0.6);
+}
